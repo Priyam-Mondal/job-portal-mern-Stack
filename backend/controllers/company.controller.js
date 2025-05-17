@@ -1,6 +1,7 @@
 import { Company } from "../models/company.model.js";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
+import { login } from "./user.controller.js";
 
 export const registerCompany = async (req, res) => {
   try {
@@ -36,6 +37,8 @@ export const registerCompany = async (req, res) => {
 export const getCompany = async (req, res) => {
   try {
     const userId = req.id; // logged in user id
+    console.log("getCompany userId:", userId);
+
     const companies = await Company.find({ userId });
     if (!companies) {
       return res.status(404).json({
