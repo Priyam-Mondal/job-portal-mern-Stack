@@ -14,8 +14,6 @@ import { setResumeData } from "@/redux/resumeSlice";
 function Navbar() {
   const { user } = useSelector((store) => store.auth);
 
-  console.log(user?._id);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logoutHandler = async () => {

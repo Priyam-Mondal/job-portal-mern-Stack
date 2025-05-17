@@ -56,7 +56,6 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    console.log("login method called", req.body);
 
     if (!email || !password || !role) {
       return res.status(400).json({
@@ -65,8 +64,6 @@ export const login = async (req, res) => {
       });
     }
     let user = await User.findOne({ email });
-
-    console.log("User found", user);
 
     if (!user) {
       return res.status(400).json({
@@ -109,10 +106,8 @@ export const login = async (req, res) => {
       .status(200)
       .cookie("token", token, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-
-        sameSite: "None",
-        secure: true,
+        httpsOnly: true,
+        sameSite: "strict",
       })
       .json({
         message: `Welcome back ${user.fullname}`,
