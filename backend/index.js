@@ -8,9 +8,11 @@ import companyRoute from "./routes/company.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
 import resumeRoute from "./routes/resume.route.js";
+import path from "path";
 
 const app = express();
 dotenv.config({});
+const __dirname = path.resolve();
 
 // middleware
 app.use(express.json());
@@ -32,6 +34,15 @@ app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/resumebuilder", resumeRoute);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/dist"))); // <-- Path to your frontend dist folder
+
+  // ✅ Handle React routing, return index.html for all unrecognized routes
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
+  });
+}
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
