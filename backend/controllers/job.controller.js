@@ -123,3 +123,53 @@ export const getAdminJobs = async (req, res) => {
     console.log(error);
   }
 };
+
+export const updateJob = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    const {
+      title,
+      description,
+      requirements,
+      salary,
+      location,
+      jobType,
+      experienceLevel,
+      position,
+      company,
+    } = req.body;
+
+    let job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({
+        message: "Job not found.",
+        success: false,
+      });
+    }
+
+    if (title !== undefined) job.title = title;
+    if (description !== undefined) job.description = description;
+    if (requirements !== undefined) job.requirements = requirements;
+    if (salary !== undefined) job.salary = Number(salary); // Ensure it's a number
+    if (location !== undefined) job.location = location;
+    if (jobType !== undefined) job.jobType = jobType;
+    if (experienceLevel !== undefined) job.experienceLevel = experienceLevel;
+    if (position !== undefined) job.position = Number(position); // Ensure it's a number
+    if (company !== undefined) job.company = company;
+
+    await job.save();
+
+    return res.status(200).json({
+      message: "Job updated successfully.",
+      updatedJob: job,
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error in updateJob:", error);
+    return res.status(500).json({
+      message: "Internal Server Error while updating job.",
+      success: false,
+    });
+  }
+};

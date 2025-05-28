@@ -24,6 +24,7 @@ import ResumeExperience from "./components/resumeBuilder/ResumeExperience";
 import ResumeExtraDetails from "./components/resumeBuilder/ResumeExtraDetails";
 import Templates from "./components/resumeBuilder/pages/Templates";
 import Resume from "./components/resumeBuilder/pages/Resume";
+import JobSetup from "./components/admin/JobSetup";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CompanySetup />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/jobs/:id",
+    element: (
+      <ProtectedRoute>
+        <JobSetup />
       </ProtectedRoute>
     ),
   },
