@@ -6,6 +6,7 @@ const authSlice = createSlice({
     loading: false,
     user: null,
   },
+  suggestedJobs: [],
   reducers: {
     setLoading: (state, action) => {
       state.loading = action.payload;
@@ -35,8 +36,12 @@ const authSlice = createSlice({
         }
       }
     },
+    setSuggestedJobs: (state, action) => {
+      state.suggestedJobs = action.payload;
+    },
   },
 });
 
-export const { setLoading, setUser, toggleSavedJob } = authSlice.actions;
+export const { setLoading, setUser, toggleSavedJob, setSuggestedJobs } =
+  authSlice.actions;
 export default authSlice.reducer;

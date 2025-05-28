@@ -79,10 +79,16 @@ function Jobs() {
   ];
 
   const { allJobs, searchedQuery } = useSelector((store) => store.job);
+  console.log("All Jobs: ", allJobs);
+
   const [filterJobs, setFilterJobs] = useState(allJobs);
 
+  const { suggestedJobs } = useSelector((store) => store.auth);
+
   useEffect(() => {
-    if (searchedQuery) {
+    if (searchedQuery === "Suggestions 🔥" && suggestedJobs.length > 0) {
+      setFilterJobs(suggestedJobs);
+    } else if (searchedQuery && searchedQuery !== "Suggestions 🔥") {
       const filteredJobs = allJobs.filter((job) => {
         // Ensure job properties exist before calling .toLowerCase()
         const title = job.title?.toLowerCase() || "";
@@ -105,23 +111,18 @@ function Jobs() {
   return (
     <div className="min-h-screen bg-gray-100">
       {" "}
-      {/* Added a light gray background to the entire page */}
       <Navbar />
       <div className="max-w-7xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
         {" "}
-        {/* Increased top margin and added horizontal padding */}
         <div className="flex flex-col md:flex-row gap-6">
           {" "}
-          {/* Changed to flex-col on small screens, flex-row on md and up, increased gap */}
           <div className="md:w-1/4 w-full">
             {" "}
-            {/* Adjusted width for filter card, full width on small screens */}
             <FilterCard />
           </div>
           {filterJobs.length <= 0 ? (
             <div className="flex-1 flex justify-center items-center h-[70vh] bg-white rounded-lg shadow-md">
               {" "}
-              {/* Centered message, added background and shadow */}
               <span className="text-xl font-semibold text-gray-600">
                 No jobs found matching your criteria.
               </span>{" "}

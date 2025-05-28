@@ -8,6 +8,7 @@ import companyRoute from "./routes/company.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
 import resumeRoute from "./routes/resume.route.js";
+import suggestionsRoute from "./routes/suggestions.route.js";
 
 const app = express();
 dotenv.config({});
@@ -32,6 +33,7 @@ app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/resumebuilder", resumeRoute);
+app.use("/api/v1/suggestions", suggestionsRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

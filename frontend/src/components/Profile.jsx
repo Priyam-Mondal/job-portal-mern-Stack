@@ -16,6 +16,8 @@ const Profile = () => {
   const { user } = useSelector((store) => store.auth);
   useGetAppliedJobs();
 
+  console.log(user.profile.skills);
+
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
       <Navbar />

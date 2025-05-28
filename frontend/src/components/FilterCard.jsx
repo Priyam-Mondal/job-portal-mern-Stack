@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSearchedQuery } from "@/redux/jobSlice";
+import useGetSuggestedJobs from "@/hooks/useGetSuggestedJobs";
 
 const fitlerData = [
   {
@@ -22,14 +23,26 @@ const fitlerData = [
     fitlerType: "Salary",
     array: ["0-40k", "42-1lakh", "1lakh to 5lakh"],
   },
+  {
+    fitlerType: "See Job Suggestions",
+    array: ["Suggestions 🔥"],
+  },
 ];
 
 const FilterCard = () => {
   const [selectedValue, setSelectedValue] = useState("");
   const dispatch = useDispatch();
+
+  // custom hook to get job suggestions
+  useGetSuggestedJobs();
+
+  const { suggestedJobs } = useSelector((store) => store.auth);
+  // console.log("Inside Filtercrad: ", suggestedJobs);
+
   const changeHandler = (value) => {
     setSelectedValue(value);
   };
+
   useEffect(() => {
     dispatch(setSearchedQuery(selectedValue));
   }, [selectedValue]);
