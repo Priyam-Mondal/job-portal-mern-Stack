@@ -51,8 +51,6 @@ const initialFormattedResumeData = {
       years: "Nov 2023 - Jan 2024",
       description: [
         "Developed and maintained web applications using HTML, CSS, JavaScript, and Reactjs.",
-        "Assisted in debugging and troubleshooting issues reported by users and QA team.",
-        "Collaborated with senior developers to implement new features and enhance existing codebase.",
       ],
     },
     {
@@ -61,8 +59,6 @@ const initialFormattedResumeData = {
       years: "Feb 2024 - Apr 2024",
       description: [
         "Conducted market research and competitor analysis to identify trends and opportunities.",
-        "Assisted in creating marketing campaigns across various channels including social media and email.",
-        "Contributed to the development of marketing materials such as brochures, flyers, and presentations.",
       ],
     },
   ],
@@ -70,11 +66,7 @@ const initialFormattedResumeData = {
     {
       title: "Online Bookstore",
       techStack: "React, Redux, Node.js, Express, MongoDB, Stripe API",
-      description: [
-        "An online platform for buying and selling books.",
-        "Users can browse through a wide range of genres, view book details, and make purchases securely.",
-        "Includes features such as user authentication, cart management, order tracking, and payment processing.",
-      ],
+      description: ["An online platform for buying and selling books."],
     },
     {
       title: "Task Management App",
@@ -82,16 +74,10 @@ const initialFormattedResumeData = {
         "Angular, TypeScript, Django, PostgreSQL, OAuth 2.0, WebSockets",
       description: [
         "A web-based task management application for organizing personal or team tasks.",
-        "Users can create tasks, assign them to team members, set deadlines, and track progress.",
-        "Supports features like task prioritization, categorization, and notification reminders.",
       ],
     },
   ],
-  achievements: [
-    "Won first place in a regional coding competition.",
-    "Winner of regional hackathon.",
-    "Specialist on Codeforces.",
-  ],
+  achievements: ["Won first place in a regional coding competition."],
   extraCurricular: [
     "Volunteered as a mentor for underprivileged high school students.",
     "President of the computer science club, organizing coding workshops.",
@@ -219,7 +205,7 @@ const ResumeTemplate1 = () => {
         display: grid !important;
         grid-template-columns: 1fr 2fr !important; /* Explicitly set columns for print */
         gap: 2rem !important; /* Ensure gap is maintained */
-        width: 100% !important; /* Ensure it takes full width */
+        
       }
 
       /* Ensure sections within the grid also behave correctly */
@@ -228,7 +214,7 @@ const ResumeTemplate1 = () => {
           float: none !important; /* Prevent floating */
           width: auto !important; /* Prevent fixed widths */
           box-sizing: border-box !important; /* Ensure consistent box model */
-          break-inside: avoid !important; /* Try to prevent breaking across pages */
+          
       }
 
        /* Optional: Adjust font sizes or margins for print if needed */
@@ -269,10 +255,7 @@ const ResumeTemplate1 = () => {
       <ResumeNavbar />
       {/* Add a ref to the element you want to capture as PDF */}
 
-      <div
-        ref={contentRef}
-        className="container mt-10 mx-auto p-8  max-w-4xl mt-40"
-      >
+      <div ref={contentRef} className="  container mx-auto p-4 max-w-4xl mt-40">
         {/* Header Section: Name and Contact Info */}
         <header className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2" style={{ color: "#1F2937" }}>
@@ -284,7 +267,7 @@ const ResumeTemplate1 = () => {
         </header>
 
         {/* Main Content Area: Two Columns */}
-        {/* Added print-grid class for print-specific styling */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 print-grid">
           {/* Left Column: Education, Skills, Coding Profile, Core Subjects */}
           <section className="md:col-span-1">

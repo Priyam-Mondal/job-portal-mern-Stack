@@ -16,69 +16,110 @@ function Navbar() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Handler for user logout
   const logoutHandler = async () => {
     try {
       const res = await axios.get(`${USER_API_END_POINT}/logout`, {
-        withCredentials: true,
+        withCredentials: true, // Important for sending cookies
       });
       if (res.data.success) {
-        dispatch(setUser(null));
-        dispatch(setResumeData(null));
-        navigate("/");
-        toast.success(res.data.message);
+        dispatch(setUser(null)); // Clear user data in Redux
+        dispatch(setResumeData(null)); // Clear resume data
+        navigate("/"); // Redirect to home page
+        toast.success(res.data.message); // Show success toast
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
+      console.error("Logout error:", error); // Log error for debugging
+      toast.error(error.response?.data?.message || "Logout failed."); // Show error toast
     }
   };
 
   return (
-    <div className="bg-white">
-      <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
+    <div className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
+      {" "}
+      <div className="flex items-center justify-between mx-auto max-w-7xl h-16 px-4 sm:px-6 lg:px-8">
+        {" "}
         <div>
-          <h1 className="text-2xl font-bold">
-            Career <span className="text-[#F83002]">Spring</span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+            {" "}
+            Career <span className="text-[#f88400]">Spring</span>{" "}
           </h1>
         </div>
-        <div className="flex items-center gap-12">
-          <ul className="flex font-medium items-center gap-5">
+        <div className="flex items-center gap-6 md:gap-10">
+          {" "}
+          <ul className="hidden md:flex font-medium items-center gap-6 text-gray-700">
+            {" "}
             {user && user.role === "recruiter" ? (
               <>
                 <li>
-                  <Link to={"/admin/companies"}>Companies</Link>
+                  <Link
+                    to={"/admin/companies"}
+                    className="hover:text-[#6A38C2] transition-colors duration-200"
+                  >
+                    Companies
+                  </Link>
                 </li>
                 <li>
-                  <Link to={"/admin/jobs"}>Jobs</Link>
+                  <Link
+                    to={"/admin/jobs"}
+                    className="hover:text-[#6A38C2] transition-colors duration-200"
+                  >
+                    Jobs
+                  </Link>
                 </li>
               </>
             ) : (
               <>
                 <li>
-                  <Link to={"/"}>Home</Link>
+                  <Link
+                    to={"/"}
+                    className="hover:text-[#6A38C2] transition-colors duration-200"
+                  >
+                    Home
+                  </Link>
                 </li>
                 <li>
-                  <Link to={"/jobs"}>Jobs</Link>
+                  <Link
+                    to={"/jobs"}
+                    className="hover:text-[#6A38C2] transition-colors duration-200"
+                  >
+                    Jobs
+                  </Link>
                 </li>
                 <li>
-                  <Link to={"/browse"}>Browse</Link>
+                  <Link
+                    to={"/browse"}
+                    className="hover:text-[#6A38C2] transition-colors duration-200"
+                  >
+                    Browse
+                  </Link>
                 </li>
                 <li>
-                  <Link to={`/${user?._id}/resumebuilder/home`}>
+                  <Link
+                    to={`/${user?._id}/resumebuilder/home`}
+                    className="hover:text-[#6A38C2] transition-colors duration-200"
+                  >
                     Resume Builder
                   </Link>
                 </li>
               </>
             )}
           </ul>
-
           {!user ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {" "}
               <Link to={"/login"}>
-                <Button variant={"outline"}>Login</Button>
+                <Button
+                  variant={"outline"}
+                  className="border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200 px-4 py-2 rounded-md"
+                >
+                  Login
+                </Button>{" "}
               </Link>
               <Link to={"/signup"}>
-                <Button className="bg-[#f8a041] hover:bg-[#ff8800] ">
+                <Button className="bg-[#f88d00] hover:bg-[#f87c00] text-white px-4 py-2 rounded-md transition-colors duration-200">
+                  {" "}
                   Signup
                 </Button>
               </Link>
@@ -86,42 +127,63 @@ function Navbar() {
           ) : (
             <Popover>
               <PopoverTrigger asChild>
-                <Avatar className={"cursor-pointer"}>
+                <Avatar className="cursor-pointer h-9 w-9 border-2 border-transparent hover:border-[#6A38C2] transition-all duration-200">
+                  {" "}
                   <AvatarImage
-                    src={user?.profile?.profilePhoto}
-                    alt="@shadcn"
+                    src={
+                      user?.profile?.profilePhoto ||
+                      "https://placehold.co/40x40/E0E0E0/808080?text=User"
+                    }
+                    alt={user?.fullname || "User Avatar"}
                   />
                 </Avatar>
               </PopoverTrigger>
-              <PopoverContent className="w-80 mr-6 mt-2">
-                <div className="flex gap-2 space-y-2">
-                  <Avatar className="cursor-pointer">
+              <PopoverContent className="w-80 p-4 mr-4 mt-2 bg-white rounded-lg shadow-lg border border-gray-100">
+                {" "}
+                <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-100">
+                  {" "}
+                  <Avatar className="h-14 w-14 flex-shrink-0">
+                    {" "}
                     <AvatarImage
-                      src={user?.profile?.profilePhoto}
-                      alt="@shadcn"
-                      className={"mx-auto my-auto"}
+                      src={
+                        user?.profile?.profilePhoto ||
+                        "https://placehold.co/60x60/E0E0E0/808080?text=User"
+                      } // Fallback for popover avatar
+                      alt={user?.fullname || "User Avatar"}
                     />
                   </Avatar>
                   <div>
-                    <h4 className="font-medium">{user?.fullname}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {user?.profile?.bio}
-                    </p>
+                    <h4 className="font-semibold text-lg text-gray-900">
+                      {user?.fullname}
+                    </h4>{" "}
+                    <p className="text-sm text-gray-600 line-clamp-1">
+                      {user?.profile?.bio || "No bio available."}
+                    </p>{" "}
                   </div>
                 </div>
-                <div className="flex flex-col my-2 text-gray-600">
+                <div className="flex flex-col text-gray-700">
                   {user && user.role === "student" && (
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <User2 />
-                      <Button variant="link">
+                    <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded-md transition-colors duration-200">
+                      {" "}
+                      <User2 className="h-5 w-5 text-gray-500" />{" "}
+                      <Button
+                        variant="link"
+                        className="text-gray-700 hover:no-underline px-0 py-2 h-auto text-base"
+                      >
+                        {" "}
                         <Link to={"/profile"}>View Profile</Link>
                       </Button>
                     </div>
                   )}
-
-                  <div className="flex w-fit items-center gap-2 cursor-pointer">
-                    <LogOut />
-                    <Button variant="link" onClick={logoutHandler}>
+                  <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded-md transition-colors duration-200">
+                    {" "}
+                    <LogOut className="h-5 w-5 text-gray-500" />{" "}
+                    <Button
+                      variant="link"
+                      onClick={logoutHandler}
+                      className="text-gray-700 hover:no-underline px-0 py-2 h-auto text-base"
+                    >
+                      {" "}
                       Logout
                     </Button>
                   </div>

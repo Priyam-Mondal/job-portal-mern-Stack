@@ -1,9 +1,11 @@
 import { User } from "../models/user.model.js";
+import { Job } from "../models/job.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 import sendMail from "../utils/mailer.js";
+import { model } from "mongoose";
 
 export const register = async (req, res) => {
   try {
@@ -53,6 +55,7 @@ export const register = async (req, res) => {
     console.log(error);
   }
 };
+
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -100,6 +103,7 @@ export const login = async (req, res) => {
       phoneNumber: user.phoneNumber,
       role: user.role,
       profile: user.profile,
+      savedJobs: user.savedJobs,
     };
 
     return res
@@ -175,6 +179,106 @@ export const updateProfile = async (req, res) => {
       message: "Profile updated successfully.",
       user,
       success: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const saveJobs = async (req, res) => {
+  try {
+    const { jobId } = req.body;
+    const userId = req.id; // middleware authentication
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found.",
+        success: false,
+      });
+    }
+    if (!jobId) {
+      return res.status(400).json({
+        message: "Job ID is required.",
+        success: false,
+      });
+    }
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(400).json({
+        message: "Job not found.",
+        success: false,
+      });
+    }
+
+    //check if job already saved
+    const jobIdStr = jobId.toString();
+    const isjobSaved = user.savedJobs.includes(jobIdStr);
+
+    let message = "";
+
+    //if already saved, remove it
+    if (isjobSaved) {
+      user.savedJobs = user.savedJobs.filter((id) => id.toString() != jobIdStr);
+      message = "Job removed from saved jobs.";
+    } else {
+      //if not saved, add it
+      user.savedJobs.push(jobId);
+      message = "Job saved successfully.";
+    }
+
+    await user.save();
+
+    const updatedUser = await User.findById(userId).populate({
+      path: "savedJobs",
+      model: "Job",
+      populate: {
+        path: "company",
+        model: "Company",
+        select: "name",
+      },
+    });
+
+    return res.status(200).json({
+      message,
+      success: true,
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error.",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+export const getSavedJobs = async (req, res) => {
+  try {
+    const userId = req.id; // middleware authentication
+    let user = await User.findById(userId).populate({
+      path: "savedJobs",
+      model: "Job",
+      populate: {
+        path: "company",
+        model: "Company",
+        select: "name",
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found.",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Saved jobs retrieved successfully.",
+      success: true,
+      savedJobs: user.savedJobs,
     });
   } catch (error) {
     console.log(error);
