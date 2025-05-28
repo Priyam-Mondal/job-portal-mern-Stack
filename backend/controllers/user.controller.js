@@ -150,7 +150,10 @@ export const updateProfile = async (req, res) => {
     let skillsArray;
     if (skills) {
       skillsArray = skills.split(",");
+    } else {
+      skillsArray = [];
     }
+
     const userId = req.id; // middleware authentication
     let user = await User.findById(userId);
 
@@ -165,7 +168,7 @@ export const updateProfile = async (req, res) => {
     if (email) user.email = email;
     if (phoneNumber) user.phoneNumber = phoneNumber;
     if (bio) user.profile.bio = bio;
-    if (skills) user.profile.skills = skillsArray;
+    user.profile.skills = skillsArray;
 
     //resume
     if (file) {

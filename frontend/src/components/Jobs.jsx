@@ -82,11 +82,21 @@ function Jobs() {
   console.log("All Jobs: ", allJobs);
 
   const [filterJobs, setFilterJobs] = useState(allJobs);
+  const [showNoSuggestionsMessage, setShowNoSuggestionsMessage] =
+    useState(false);
 
-  const { suggestedJobs } = useSelector((store) => store.auth);
+  const { suggestedJobs = [] } = useSelector((store) => store.auth);
 
   useEffect(() => {
-    if (searchedQuery === "Suggestions 🔥" && suggestedJobs.length > 0) {
+    setShowNoSuggestionsMessage(false);
+
+    if (searchedQuery === "Suggestions 🔥") {
+      if (suggestedJobs.length > 0) {
+        setFilterJobs(suggestedJobs);
+      } else {
+        setFilterJobs([]);
+        setShowNoSuggestionsMessage(true);
+      }
       setFilterJobs(suggestedJobs);
     } else if (searchedQuery && searchedQuery !== "Suggestions 🔥") {
       const filteredJobs = allJobs.filter((job) => {
@@ -110,39 +120,41 @@ function Jobs() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {" "}
       <Navbar />
       <div className="max-w-7xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
-        {" "}
         <div className="flex flex-col md:flex-row gap-6">
-          {" "}
           <div className="md:w-1/4 w-full">
-            {" "}
             <FilterCard />
           </div>
-          {filterJobs.length <= 0 ? (
+
+          {/* Conditional rendering for no jobs/no suggestions */}
+          {showNoSuggestionsMessage ? (
+            <div className="flex-1 flex flex-col justify-center items-center h-[70vh] bg-white rounded-lg shadow-md p-4">
+              <span className="text-xl font-semibold text-gray-600 mb-2">
+                No job suggestions found.
+              </span>
+              <span className="text-md text-gray-500 text-center">
+                To get personalized job suggestions, please update your profile
+                with your **skills**.
+              </span>
+            </div>
+          ) : filterJobs.length <= 0 ? (
             <div className="flex-1 flex justify-center items-center h-[70vh] bg-white rounded-lg shadow-md">
-              {" "}
               <span className="text-xl font-semibold text-gray-600">
                 No jobs found matching your criteria.
-              </span>{" "}
-              {/* Styled message */}
+              </span>
             </div>
           ) : (
             <div className="flex-1 h-[88vh] overflow-y-auto pb-5 pr-2 custom-scrollbar">
-              {" "}
-              {/* Added custom scrollbar class and right padding */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {" "}
-                {/* Responsive grid columns, increased gap */}
                 {filterJobs.map((job) => (
                   <motion.div
-                    initial={{ opacity: 0, y: 50 }} // Changed initial animation
+                    initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -50 }} // Changed exit animation
-                    transition={{ duration: 0.4 }} // Slightly faster transition
+                    exit={{ opacity: 0, y: -50 }}
+                    transition={{ duration: 0.4 }}
                     key={job?._id}
-                    className="transform hover:scale-[1.02] transition-transform duration-200 ease-in-out" // Added subtle hover effect
+                    className="transform hover:scale-[1.02] transition-transform duration-200 ease-in-out"
                   >
                     <Job job={job} />
                   </motion.div>

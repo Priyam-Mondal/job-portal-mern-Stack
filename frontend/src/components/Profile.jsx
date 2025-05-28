@@ -49,10 +49,8 @@ const Profile = () => {
           </Button>
         </div>
 
-        {/* Replaced Separator with a styled div */}
         <div className="h-px bg-gray-200 my-6"></div>
 
-        {/* Contact Information Section */}
         <div className="mb-8">
           <h2 className="font-bold text-xl text-gray-800 mb-4">
             Contact Information

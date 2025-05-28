@@ -24,7 +24,7 @@ const fitlerData = [
     array: ["0-40k", "42-1lakh", "1lakh to 5lakh"],
   },
   {
-    fitlerType: "See Job Suggestions",
+    fitlerType: "Personalized Job Suggestions",
     array: ["Suggestions 🔥"],
   },
 ];
