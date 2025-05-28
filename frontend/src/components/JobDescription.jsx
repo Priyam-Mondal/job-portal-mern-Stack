@@ -98,11 +98,17 @@ const JobDescription = () => {
       <h1 className="border-b-2 border-b-gray-300 font-medium py-4">
         Job Description
       </h1>
-      <div className="my-4">
+      <div className="my-4 p-4 shadow-2xl">
         <h1 className="font-bold my-1">
           Role:{" "}
           <span className="pl-4 font-normal text-gray-800">
             {singleJob?.title}
+          </span>
+        </h1>
+        <h1 className="font-bold my-1">
+          Requirements:{" "}
+          <span className="pl-4 font-normal text-gray-800">
+            {singleJob?.requirements.join(", ")}
           </span>
         </h1>
         <h1 className="font-bold my-1">
